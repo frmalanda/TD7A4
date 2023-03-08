@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  Network_TD7:
+    driver: bridge
+
+services:
+  mongodb:
+    image: mongo
+    networks:
+      - Network_TD7
+    ports:
+      - 27017:27017
+    container_name: mongodb
+    volumes:
+      - ./data:/data/database
+    
+  flaskapp:
+    build: .
+    ports:
+      - 5000:5000
+    networks:
+      - Network_TD7
+    depends_on:
+      - mongodb
+    container_name: flaskTD7
+    volumes:
+      - type: bind
+        source: ./file.txt
+        target: /TD6/file.txt
